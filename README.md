@@ -6,6 +6,7 @@
 * [pygridgen](https://github.com/hetland/pygridgen)
 * [lightgbm](https://pypi.org/project/lightgbm/)(best choice) or [Tensorflow](https://www.tensorflow.org/) or [Keras](https://pypi.org/project/Keras/) 
 * [basemap](https://basemaptutorial.readthedocs.io/en/latest/)
+* netCDF4
 
 
 ## Usage
@@ -17,6 +18,7 @@ python main.py --boundary_name [FILENAME] --shape1 [NUM1] --shape2 [NUM2]
 ```
 python main.py --boundary_name boundary_bh_0.5d.csv --shape1 50 --shape2 50
 ```
+The image and `.nc` file can be found in `./result/res`.
 
 ## Toy Example
 
