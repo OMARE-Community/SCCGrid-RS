@@ -192,3 +192,34 @@ for i in range(3):
 #res = np.column_stack((res_x,res_y))
 #df = pd.DataFrame(res)
 #df.to_csv('tx_'+str(resolution_shape[0])+'_'+str(resolution_shape[1])+'.csv')
+import netCDF4 as nc
+data = nc.Dataset('./etopo1.nc')
+
+
+lat_left = data['lat'][:][0]
+lat_right = data['lat'][:][-1]
+lon_left = data['lon'][:][0]
+lon_right = data['lon'][:][-1]
+
+xx = data['lat'][:].data
+yy = data['lon'][:].data
+fvals = data['Band1'][:].data
+depth = np.ones(np.shape(grid.x.data))
+newfunc = interpolate.interp2d(yy, xx, fvals, kind='linear')
+for i in range(np.shape(grid.x.data)[0]):
+    for j in range(np.shape(grid.x.data)[1]):
+        depth[i][j] = newfunc(grid.x.data[i][j],grid.y.data[i][j])
+        
+lonS=np.linspace(0,1,np.shape(grid.x.data)[0])
+latS=np.linspace(0,1,np.shape(grid.x.data)[1])
+da=nc.Dataset('./result/res'+'result.nc','w',format='NETCDF4')
+da.createDimension('dimx',np.shape(grid.x.data)[0]) 
+da.createDimension('dimy',np.shape(grid.x.data)[1]) 
+da.createVariable("lon",'f',('dimx','dimy')) 
+da.createVariable("lat",'f',('dimx','dimy')) 
+da.variables['lat'][:]=grid.x.data  
+da.variables['lon'][:]=grid.y.data  
+da.createVariable('depth','f8',('dimx','dimy')) 
+#data[0][0] = np.nan
+da.variables['depth'][:]=depth
+da.close()
